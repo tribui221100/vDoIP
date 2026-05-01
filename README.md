@@ -54,6 +54,18 @@ Terminal 2:
 ./build/doip_client 127.0.0.1
 ```
 
+## QEMU Setup (macOS Apple Silicon)
+
+Use this ARM64 image path:
+
+`/Users/bmt2211/Documents/qemu_img/ubuntu_arm64.qcow2`
+
+You can start the VM with the provided script:
+
+```bash
+./scripts/run_vm.sh
+```
+
 ## Run with QEMU guest
 
 ### 1) Start QEMU with port forward
@@ -61,9 +73,12 @@ Terminal 2:
 Use user-mode networking and forward host port `13400` to guest `13400`:
 
 ```bash
-qemu-system-x86_64 \
+qemu-system-aarch64 \
+  -machine virt,accel=hvf \
+  -cpu host \
+  -smp 2 \
   -m 1024 \
-  -hda <your-linux-image.qcow2> \
+  -drive if=virtio,file="/Users/bmt2211/Documents/qemu_img/ubuntu_arm64.qcow2",format=qcow2 \
   -nic user,hostfwd=tcp::13400-:13400
 ```
 
